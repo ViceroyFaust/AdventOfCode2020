@@ -2,6 +2,16 @@
 #include <string>
 #include <vector>
 
+bool isValid(int min, int max, char letter, const std::string& pass) {
+    int count = 0;
+    for (char c : pass)
+        if (c == letter)
+            count++;
+    if (count >= min && count <= max)
+        return true;
+    return false;
+}
+
 enum State {
     state_min,
     state_max,
@@ -53,6 +63,6 @@ int main() {
                 }
         }
     }
-    
+
     return 0;
 }
