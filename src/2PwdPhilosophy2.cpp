@@ -10,8 +10,8 @@ enum State {
 };
 
 bool isValid(int index1, int index2, char letter, const std::string& pass) {
-    bool index1char = letter == pass[index1];
-    bool index2char = letter == pass[index2];
+    bool index1char = letter == pass[index1 - 1];
+    bool index2char = letter == pass[index2 - 1];
     return index1char xor index2char;
 }
 
