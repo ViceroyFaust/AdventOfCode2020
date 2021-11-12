@@ -9,6 +9,18 @@ enum state {
     state_next
 };
 
+bool isValid(const std::unordered_map<std::string, std::string> fields, std::vector<std::string>& req) {
+    if (fields.size() < 7)
+        return false;
+    for (std::string str : req) {
+        auto found = fields.find(str);
+        if (found == fields.end()) {
+            return false;
+        }
+    }
+    return true;
+}
+
 int main() {
     std::vector<std::string> reqFields = {
         "byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid" /*, "cid"*/
@@ -21,15 +33,7 @@ int main() {
     int validCount = 0;
     while (std::getline(std::cin, input)) {
         if (input == "") {
-            bool isValid = true;
-            for (std::string str : reqFields) {
-                auto found = fieldsMap.find(str);
-                if (found == fieldsMap.end()) {
-                    isValid = false;
-                    break;
-                }
-            }
-            if (isValid)
+            if (isValid(fieldsMap, reqFields))
                 ++validCount;
             fieldsMap.clear();
         } else {
@@ -46,10 +50,7 @@ int main() {
                         ++i;
                         break;
                     case state_value:
-                        if (i == input.size() - 1) {
-                            value += input[i];
-                            stage = state_next;
-                        } else if (input[i] == ' ') {
+                        if (i >= input.size() || input[i] == ' ') {
                             stage = state_next;
                         } else {
                             value += input[i];
@@ -67,6 +68,10 @@ int main() {
                 }
             }
         }
+    }
+    // Due to endline, the while loop never reaches the last validation
+    if (isValid(fieldsMap, reqFields)) {
+        ++validCount;
     }
     std::cout << validCount << std::endl;
     return 0;
