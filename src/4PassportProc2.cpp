@@ -18,6 +18,10 @@ enum field {
     pid
 };
 
+bool isathruf(char c) {
+    return ('a' <= c && 'f' >= c);
+}
+ 
 bool isValid(const std::unordered_map<std::string, std::string> fields) {
     std::unordered_map<std::string, field> req = {
         std::pair("byr", byr), std::pair("iyr", iyr), std::pair("eyr", eyr),
@@ -37,7 +41,7 @@ bool isValid(const std::unordered_map<std::string, std::string> fields) {
                     if (year < min || year > max)
                         return false;
                     break;
-                } catch (std::invalid_argument e) {
+                } catch (std::invalid_argument& e) {
                     return false;
                 }
                 case iyr: try {
@@ -46,7 +50,7 @@ bool isValid(const std::unordered_map<std::string, std::string> fields) {
                     if (year < min || year > max)
                         return false;
                     break;
-                } catch (std::invalid_argument e) {
+                } catch (std::invalid_argument& e) {
                     return false;
                 }
                 case eyr: try {
@@ -55,7 +59,7 @@ bool isValid(const std::unordered_map<std::string, std::string> fields) {
                     if (year < min || year > max)
                         return false;
                     break;
-                } catch (std::invalid_argument e) {
+                } catch (std::invalid_argument& e) {
                     return false;
                 }
                 case hgt: try {
@@ -65,12 +69,12 @@ bool isValid(const std::unordered_map<std::string, std::string> fields) {
                     int heightNum = std::stoi(height.substr(0, height.size() - 2));
                     if ("cm" != height.substr(height.size() - 2) && "in" != height.substr(height.size() - 2))
                         return false;
-                    if ("cm" == height.substr(height.size() - 2) && (heightNum < minCm && heightNum > maxCm))
+                    if ("cm" == height.substr(height.size() - 2) && (heightNum < minCm || heightNum > maxCm))
                         return false;
-                    if ("in" == height.substr(height.size() - 2) && (heightNum < minIn && heightNum > maxIn))
+                    if ("in" == height.substr(height.size() - 2) && (heightNum < minIn || heightNum > maxIn))
                         return false;
                     break;
-                } catch (std::invalid_argument e) {
+                } catch (std::invalid_argument& e) {
                     return false;
                 }
                 case hcl: {
@@ -80,7 +84,7 @@ bool isValid(const std::unordered_map<std::string, std::string> fields) {
                     if (hex[0] != '#')
                         return false;
                     for (unsigned int i = 1; i < 7; ++i) {
-                        if ((isdigit(hex[i]) != 0) && (isalpha(hex[i]) != 0))
+                        if (!isdigit(hex[i]) && !isathruf(hex[i]))
                             return false;
                     }
                     break;
