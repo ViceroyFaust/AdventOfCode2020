@@ -83,24 +83,18 @@ bool checkId(const std::string& str) {
 
 bool checkField(const std::string& key, const std::string& value) {
     if (key.substr(key.size() - 2) == "yr") {
-        if (!checkYr(key[0], value))
-            return false;
+            return checkYr(key[0], value);
     } else if (key == "hgt") {
-        if (!checkHeight(value))
-            return false;
+            return checkHeight(value);
     } else if (key == "hcl") {
-        if (!checkHex(value))
-            return false;
+            return checkHex(value);
     } else if (key == "ecl") {
-        if (!checkColor(value))
-            return false;
+            return checkColor(value);
     } else if (key == "pid") {
-        if (!checkId(value))
-            return false;
+            return checkId(value);
     } else {
         return false;
     }
-    return true;
 }
 
 bool checkPassport(const std::string& passport) {
