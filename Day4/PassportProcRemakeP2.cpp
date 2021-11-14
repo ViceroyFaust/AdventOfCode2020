@@ -26,16 +26,14 @@ bool checkYr(char key, const std::string& value) {
         return false;
     int year = std::stoi(value);
     if (key == 'b') {
-        if (!isIntBetween(1920, 2002, year))
-            return false;
+        return isIntBetween(1920, 2002, year);
     } else if (key == 'i') {
-        if (!isIntBetween(2010, 2020, year))
-            return false;
+        return isIntBetween(2010, 2020, year);
     } else if (key == 'e') {
-        if (!isIntBetween(2020, 2030, year))
-            return false;
+        return isIntBetween(2020, 2030, year);
+    } else {
+        return false;
     }
-    return true;
 }
 
 bool checkHeight(const std::string& str) {
@@ -44,15 +42,12 @@ bool checkHeight(const std::string& str) {
     std::string measure = str.substr(str.size() - 2);
     int height = std::stoi(str.substr(0, str.size() - 2));
     if (measure == "cm") {
-        if (!isIntBetween(150, 193, height))
-            return false;
+        return isIntBetween(150, 193, height);
     } else if (measure == "in") {
-        if (!isIntBetween(59, 76, height))
-            return false;
+        return isIntBetween(59, 76, height);
     } else {
         return false;
     }
-    return true;
 }
 
 bool checkHex(const std::string& str) {
@@ -60,7 +55,7 @@ bool checkHex(const std::string& str) {
         return false;
     for (unsigned int i = 1; i < 7; ++i) {
         char c = str[i];
-        if(!isIntBetween('0', '9', c) && !isIntBetween('a', 'f', c))
+        if (!isIntBetween('0', '9', c) && !isIntBetween('a', 'f', c))
             return false;
     }
     return true;
@@ -68,14 +63,14 @@ bool checkHex(const std::string& str) {
 
 bool checkColor(const std::string& str) {
     return str == "amb" || str == "blu" || str == "brn" ||
-    str == "gry" || str == "grn" || str == "hzl" || str == "oth";
+           str == "gry" || str == "grn" || str == "hzl" || str == "oth";
 }
 
 bool checkId(const std::string& str) {
     if (str.length() != 9)
         return false;
     for (char c : str) {
-        if(!isdigit(c))
+        if (!isdigit(c))
             return false;
     }
     return true;
@@ -83,15 +78,15 @@ bool checkId(const std::string& str) {
 
 bool checkField(const std::string& key, const std::string& value) {
     if (key.substr(key.size() - 2) == "yr") {
-            return checkYr(key[0], value);
+        return checkYr(key[0], value);
     } else if (key == "hgt") {
-            return checkHeight(value);
+        return checkHeight(value);
     } else if (key == "hcl") {
-            return checkHex(value);
+        return checkHex(value);
     } else if (key == "ecl") {
-            return checkColor(value);
+        return checkColor(value);
     } else if (key == "pid") {
-            return checkId(value);
+        return checkId(value);
     } else {
         return false;
     }
