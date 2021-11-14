@@ -56,9 +56,10 @@ bool checkHeight(const std::string& str) {
 }
 
 bool checkHex(const std::string& str) {
-    if (str[0] != '#')
+    if (str.length() != 7 || str[0] != '#')
         return false;
-    for (char c : str) {
+    for (unsigned int i = 1; i < 7; ++i) {
+        char c = str[i];
         if(!isIntBetween('0', '9', c) && !isIntBetween('a', 'f', c))
             return false;
     }
@@ -83,6 +84,9 @@ bool checkId(const std::string& str) {
 bool checkField(const std::string& key, const std::string& value) {
     if (key.substr(key.size() - 2) == "yr") {
         if (!checkYr(key[0], value))
+            return false;
+    } else if (key == "hgt") {
+        if (!checkHeight(value))
             return false;
     } else if (key == "hcl") {
         if (!checkHex(value))
