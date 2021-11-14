@@ -17,11 +17,11 @@ std::vector<std::string> splitString(const std::string& str, std::string delim =
     return output;
 }
 // Inclusive
-bool isIntBetween(int min, int max, int year) {
-    return year >= min && year <= max;
+bool isIntBetween(int min, int max, int num) {
+    return num >= min && num <= max;
 }
 
-bool checkYrField(char key, const std::string& value) {
+bool checkYr(char key, const std::string& value) {
     if (value.size() != 4)
         return false;
     int year = std::stoi(value);
@@ -38,25 +38,61 @@ bool checkYrField(char key, const std::string& value) {
     return true;
 }
 
+bool checkHeight(const std::string& str) {
+    if (str.length() < 4)
+        return false;
+    std::string measure = str.substr(str.size() - 2);
+    int height = std::stoi(str.substr(0, str.size() - 2));
+    if (measure == "cm") {
+        if (!isIntBetween(150, 193, height))
+            return false;
+    } else if (measure == "in") {
+        if (!isIntBetween(59, 76, height))
+            return false;
+    } else {
+        return false;
+    }
+}
+
+bool checkHex(const std::string& str) {
+    if (str[0] != '#')
+        return false;
+    for (char c : str) {
+        if(!isIntBetween('0', '9', c) && !isIntBetween('a', 'f', c))
+            return false;
+    }
+    return true;
+}
+
+bool checkColor(const std::string& str) {
+    return str == "amb" || str == "blu" || str == "brn" ||
+    str == "gry" || str == "grn" || str == "hzl" || str == "oth";
+}
+
+bool checkId(const std::string& str) {
+    if (str.length() != 9)
+        return false;
+    for (char c : str) {
+        if(!isdigit(c))
+            return false;
+    }
+    return true;
+}
+
 bool checkField(const std::string& key, const std::string& value) {
-    try {
-            if (key == "hgt") {
-            std::string measure = value.substr(value.size() - 2);
-            int height = std::stoi(value.substr(0, value.size() - 2));
-            if (measure == "cm") {
-                if (!isIntBetween(150, 193, height))
-                    return false;
-            } else if (measure == "in") {
-                if (!isIntBetween(59, 76, height))
-                    return false;
-            } else {
-                return false;
-            }
-        } else if (key == "hcl") {
-        } else if (key == "ecl") {
-        } else if (key == "pid") {
-        }
-    } catch (std::invalid_argument& e) {
+    if (key.substr(key.size() - 2) == "yr") {
+        if (!checkYr(key[0], value))
+            return false;
+    } else if (key == "hcl") {
+        if (!checkHex(value))
+            return false;
+    } else if (key == "ecl") {
+        if (!checkColor(value))
+            return false;
+    } else if (key == "pid") {
+        if (!checkId(value))
+            return false;
+    } else {
         return false;
     }
     return true;
