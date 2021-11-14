@@ -52,6 +52,7 @@ bool checkHeight(const std::string& str) {
     } else {
         return false;
     }
+    return true;
 }
 
 bool checkHex(const std::string& str) {
