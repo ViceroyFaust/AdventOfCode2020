@@ -16,9 +16,31 @@ std::vector<std::string> splitString(const std::string& str, std::string delim =
     output.push_back(str.substr(start));
     return output;
 }
+// Inclusive
+bool isIntBetween(int min, int max, int year) {
+    return year >= min && year <= max;
+}
 
 bool checkField(const std::string& key, const std::string& value) {
-    return false;
+    try {
+        if (key == "byr") {
+            if (!isIntBetween(1920, 2002, std::stoi(value)))
+                return false;
+        } else if (key == "iyr") {
+            if (!isIntBetween(2010, 2020, std::stoi(value)))
+                return false;
+        } else if (key == "eyr") {
+            if (!isIntBetween(2020, 2030, std::stoi(value)))
+                return false;
+        } else if (key == "hgt") {
+        } else if (key == "hcl") {
+        } else if (key == "ecl") {
+        } else if (key == "pid") {
+        }
+    } catch (std::invalid_argument& e) {
+        return false;
+    }
+    return true;
 }
 
 bool checkPassport(const std::string& passport) {
