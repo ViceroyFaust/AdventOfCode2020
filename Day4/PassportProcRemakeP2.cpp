@@ -21,18 +21,37 @@ bool isIntBetween(int min, int max, int year) {
     return year >= min && year <= max;
 }
 
+bool checkYrField(char key, const std::string& value) {
+    if (value.size() != 4)
+        return false;
+    int year = std::stoi(value);
+    if (key == 'b') {
+        if (!isIntBetween(1920, 2002, year))
+            return false;
+    } else if (key == 'i') {
+        if (!isIntBetween(2010, 2020, year))
+            return false;
+    } else if (key == 'e') {
+        if (!isIntBetween(2020, 2030, year))
+            return false;
+    }
+    return true;
+}
+
 bool checkField(const std::string& key, const std::string& value) {
     try {
-        if (key == "byr") {
-            if (!isIntBetween(1920, 2002, std::stoi(value)))
+            if (key == "hgt") {
+            std::string measure = value.substr(value.size() - 2);
+            int height = std::stoi(value.substr(0, value.size() - 2));
+            if (measure == "cm") {
+                if (!isIntBetween(150, 193, height))
+                    return false;
+            } else if (measure == "in") {
+                if (!isIntBetween(59, 76, height))
+                    return false;
+            } else {
                 return false;
-        } else if (key == "iyr") {
-            if (!isIntBetween(2010, 2020, std::stoi(value)))
-                return false;
-        } else if (key == "eyr") {
-            if (!isIntBetween(2020, 2030, std::stoi(value)))
-                return false;
-        } else if (key == "hgt") {
+            }
         } else if (key == "hcl") {
         } else if (key == "ecl") {
         } else if (key == "pid") {
