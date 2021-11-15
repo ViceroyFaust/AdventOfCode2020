@@ -87,30 +87,18 @@ bool checkField(const std::string& key, const std::string& value) {
         return checkColor(value);
     } else if (key == "pid") {
         return checkId(value);
-    } else {
-        return false;
     }
+    return false;
 }
 
 bool checkPassport(const std::string& passport) {
     std::vector<std::string> fields = splitString(passport);
-    if (fields.size() < 7)
-        return false;
-
-    auto i = std::find_if(fields.begin(), fields.end(), [](const std::string& str) -> bool {
-        if (str.find("cid") == std::string::npos) return false;
-        return true;
-    });
-    if (i != fields.end())
-        fields.erase(i);
-    if (fields.size() != 7)
-        return false;
+    int correctFields = 0;
     for (std::string str : fields) {
         std::vector<std::string> splitField = splitString(str, ":");
-        if (!checkField(splitField[0], splitField[1]))
-            return false;
+        correctFields += checkField(splitField[0], splitField[1]);
     }
-    return true;
+    return correctFields == 7;
 }
 
 int main() {
