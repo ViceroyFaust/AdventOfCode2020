@@ -2,6 +2,7 @@
 #include <string>
 
 int main() {
+    int topIndex = 0;
     std::string input;
     std::getline(std::cin, input);
     do {
@@ -20,7 +21,11 @@ int main() {
             } else { // 'R'
                 leftCol += (1 + rightCol - leftCol) / 2;
             }
-
         }
+        int seatIndex = frontRow * 8 + leftCol;
+        if (seatIndex > topIndex)
+            topIndex = seatIndex;
     } while (std::getline(std::cin, input));
+    std::cout << topIndex << std::endl;
+    return 0;
 }
