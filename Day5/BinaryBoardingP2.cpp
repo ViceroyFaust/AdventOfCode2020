@@ -13,7 +13,7 @@ int main() {
         // 128 rows & 8 cols
         int frontRow = 0, backRow = 127;
         int leftCol = 0, rightCol = 7;
-        for (unsigned int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; ++i) {
             if (input[i] == 'F') {
                 backRow -= (backRow - frontRow) / 2;
             } else if (input[i] == 'B') {
@@ -28,7 +28,7 @@ int main() {
         seats.push_back(seatIndex);
     } while (std::getline(std::cin, input));
     sort(seats.begin(), seats.end());
-    for (unsigned int i = 1; i < seats.size(); ++i) {
+    for (size_t i = 1; i < seats.size(); ++i) {
         if (seats[i - 1] != seats[i] - 1) {
             std::cout << seats[i] - 1 << std::endl;
             break;
