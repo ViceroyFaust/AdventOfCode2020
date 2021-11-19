@@ -4,6 +4,11 @@
 #include <unordered_map>
 #include <vector>
 
+struct Bag {
+    std::string name;
+    std::vector<std::pair<int, Bag*>> bags;
+};
+
 std::vector<std::string> splitString(const std::string& str, std::string delim = " ") {
     typedef std::string::size_type index;
     std::vector<std::string> output;
@@ -36,25 +41,26 @@ std::set<std::pair<std::string, int>> extractContainedBags(const std::string& wo
 
 std::string extractKey(const std::string& word) {
     std::vector<std::string> keyWordSplit = splitString(word);
-    return keyWordSplit[0] + " " + keyWordSplit[1]; // Key is the first two words before "contain"
+    return keyWordSplit[0] + " " + keyWordSplit[1];  // Key is the first two words before "contain"
+}
+
+bool hasBag(const std::unordered_map<std::string, std::set<std::pair<std::string, int>>>& containedBags) {
+    
+    return false;
 }
 
 int main() {
     // Map containing sets of string and int
     std::unordered_map<std::string, std::set<std::pair<std::string, int>>> rules;
     std::string input;
+    // Collect all bag rules and store them in a map
     while (std::getline(std::cin, input)) {
-        std::string key;
         std::vector<std::string> containSplit = splitString(input, " contain ");
-        key = extractKey(containSplit[0]);
-        // Each contained bag has a number, thus pair
+        std::string key = extractKey(containSplit[0]);
         std::set<std::pair<std::string, int>> bagSet = extractContainedBags(containSplit[1]);
-
-        std::cout << key << ": ";
-        for (auto i = bagSet.begin(); i != bagSet.end(); ++i) {
-            std::cout << i->second << " " << i->first << " ";
-        }
-        std::cout << std::endl;
     }
+    int counter = 0;
+    if (hasBag(rules))
+        counter++;
     return 0;
 }
