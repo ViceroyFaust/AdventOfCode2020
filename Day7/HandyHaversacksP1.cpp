@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <queue>
 
 std::vector<std::string> splitString(const std::string& str, std::string delim = " ") {
     typedef std::string::size_type index;
@@ -42,6 +43,17 @@ std::set<std::pair<std::string, int>> extractContainedBags(const std::string& wo
 std::string extractKey(const std::string& word) {
     std::vector<std::string> keyWordSplit = splitString(word);
     return keyWordSplit[0] + " " + keyWordSplit[1]; // Key is always the first two words before "contain"
+}
+
+int goldCount(std::unordered_map<std::string, std::set<std::pair<std::string, int>>> rules) {
+    int count = 0;
+    std::queue<std::string> q;
+    for (auto i = rules.begin(); i != rules.end(); ++i) {
+        q.push(i->first);
+        while (q.size() > 0) {
+            
+        }
+    }
 }
 
 int main() {
