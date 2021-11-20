@@ -52,11 +52,12 @@ int main() {
         std::vector<std::string> containSplit = splitString(input, " contain ");
         std::string key = extractKey(containSplit[0]);
         std::set<std::pair<std::string, int>> bagSet = extractContainedBags(containSplit[1]);
-
-        std::cout << key << ": ";
-        for (auto i = bagSet.begin(); i != bagSet.end(); ++i) {
-            std::cout << i->second << " " << i->first << " ";
-        }
+        rules.insert(std::pair(key, bagSet));
+    }
+    for (auto i = rules.begin(); i != rules.end(); ++i) {
+        std::cout << i->first << ": ";
+        for (auto j = i->second.begin(); j != i->second.end(); ++j)
+            std::cout << j->second << j->first << " ";
         std::cout << std::endl;
     }
     return 0;
