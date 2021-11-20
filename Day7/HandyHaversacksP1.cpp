@@ -1,4 +1,6 @@
 #include <iostream>
+#include <queue>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -21,7 +23,7 @@ std::vector<std::string> splitString(const std::string& str, std::string delim =
     return output;
 }
 
-std::pair<bool, Bag*> bagExists(const std::vector<Bag*>& list, const std::string& key) {
+std::pair<bool, Bag*> bagExists(const std::set<Bag*>& list, const std::string& key) {
     for (Bag* b : list) {
         if (b->name == key)
             return std::pair<bool, Bag*>(true, b);
@@ -29,7 +31,10 @@ std::pair<bool, Bag*> bagExists(const std::vector<Bag*>& list, const std::string
     return std::pair<bool, Bag*>(false, NULL);
 }
 
-std::pair<int, Bag*> extractPair(const std::string& word, const std::vector<Bag*>& bagList) {
+std::pair<int, Bag*> extractPair(const std::string& word, const std::set<Bag*>& bagList) {
+    if (word == "no other bags.") {
+        return std::pair<int, Bag*>(0, NULL);
+    }
     std::vector<std::string> words = splitString(word);
     int num = std::stoi(words[0]);
     std::string bagType = words[1] + " " + words[2];
@@ -44,7 +49,7 @@ std::pair<int, Bag*> extractPair(const std::string& word, const std::vector<Bag*
     return std::pair<int, Bag*>(num, bag);
 }
 
-std::vector<std::pair<int, Bag*>> extractContainedBags(const std::string& word, const std::vector<Bag*>& bagList) {
+std::vector<std::pair<int, Bag*>> extractContainedBags(const std::string& word, const std::set<Bag*>& bagList) {
     std::vector<std::pair<int, Bag*>> output;
     std::vector<std::string> bags = splitString(word, ", ");
     for (std::string str : bags) {
@@ -59,21 +64,25 @@ std::string extractKey(const std::string& word) {
 }
 
 int main() {
-    std::vector<Bag*> bagsList;
+    std::set<Bag*> bagsList;
     std::string input;
     while (std::getline(std::cin, input)) {
         auto splitContain = splitString(input, " contain ");
-        std::string key;
-        if (bagExists) {
+        std::string key = extractKey(splitContain[0]);
+        Bag* bag;
+        auto exists = bagExists(bagsList, key);
+        if (exists.first) {
+            bag = exists.second;
         } else {
-            Bag* bag = new Bag;
-            bagsList.push_back(bag);
-            bag->name = extractKey(splitContain[0]);
-            auto insideBags = extractContainedBags(splitContain[1], bagsList);
-            bag->bags = insideBags;
-            for (std::pair<int, Bag*> p : bag->bags) {
-                bagsList.push_back(p.second);
-            }
+            bag = new Bag;
+            bagsList.insert(bag);
+            bag->name = key;
+        }
+        auto insideBags = extractContainedBags(splitContain[1], bagsList);
+        bag->bags = insideBags;
+        for (std::pair<int, Bag*> p : bag->bags) {
+            if (p.second)
+                bagsList.insert(p.second);
         }
     }
     return 0;
