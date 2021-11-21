@@ -45,15 +45,27 @@ std::string extractKey(const std::string& word) {
     return keyWordSplit[0] + " " + keyWordSplit[1]; // Key is always the first two words before "contain"
 }
 
-int goldCount(std::unordered_map<std::string, std::set<std::pair<std::string, int>>> rules) {
-    int count = 0;
+int goldCount(const std::unordered_map<std::string, std::set<std::pair<std::string, int>>>& rules) {
+    int totCount = 0;
     std::queue<std::string> q;
     for (auto i = rules.begin(); i != rules.end(); ++i) {
+        if (i->first == "shiny gold")
+            continue;
         q.push(i->first);
+        int count = 0;
         while (q.size() > 0) {
-            
+            if (q.front() == "shiny gold")
+                ++count;
+            for (auto bags = rules.at(q.front()).begin(); bags != rules.at(q.front()).end(); ++bags) {
+                if (bags->first != "")
+                    q.push(bags->first);
+            }
+            q.pop();
         }
+        if (count > 0)
+            ++totCount;
     }
+    return totCount;
 }
 
 int main() {
@@ -66,11 +78,6 @@ int main() {
         std::set<std::pair<std::string, int>> bagSet = extractContainedBags(containSplit[1]);
         rules.insert(std::pair(key, bagSet));
     }
-    for (auto i = rules.begin(); i != rules.end(); ++i) {
-        std::cout << i->first << ": ";
-        for (auto j = i->second.begin(); j != i->second.end(); ++j)
-            std::cout << j->second << j->first << " ";
-        std::cout << std::endl;
-    }
+    std::cout << goldCount(rules) << std::endl;
     return 0;
 }
