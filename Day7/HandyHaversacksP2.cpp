@@ -47,20 +47,20 @@ std::string extractKey(const std::string& word) {
 
 int insideGoldCount(const std::unordered_map<std::string, std::set<std::pair<std::string, int>>>& rules) {
     int totCount = 0;
-    std::queue<std::string> q;
-    q.push("shiny gold");
-    int count = 0;
+    std::queue<std::pair<std::string, int>> q;
+    q.push(std::pair("shiny gold", 1));
     while (q.size() > 0) {
-        if (q.front() == "shiny gold")
-            ++count;
-        for (auto bags = rules.at(q.front()).begin(); bags != rules.at(q.front()).end(); ++bags) {
-            if (bags->first != "")
-                q.push(bags->first);
+        int bagsCount = 0;
+        auto curSet = rules.at(q.front().first);
+        for (auto bags = curSet.begin(); bags != curSet.end(); ++bags) {
+            if (bags->first != "") {
+                q.push(std::pair(bags->first, bags->second));
+                bagsCount += bags->second;
+            }
         }
+        totCount += q.front().second * bagsCount;
         q.pop();
     }
-    if (count > 0)
-        ++totCount;
     return totCount;
 }
 
