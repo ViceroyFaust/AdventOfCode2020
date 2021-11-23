@@ -45,10 +45,11 @@ std::string extractKey(const std::string& word) {
     return keyWordSplit[0] + " " + keyWordSplit[1];  // Key is always the first two words before "contain"
 }
 
-int insideGoldCount(const std::unordered_map<std::string, std::set<std::pair<std::string, int>>>& rules) {
-    int totCount = 0;
+unsigned long insideGoldCount(const std::unordered_map<std::string, std::set<std::pair<std::string, int>>>& rules) {
+    unsigned long totCount = 0;
     std::queue<std::pair<std::string, int>> q;
     q.push(std::pair("shiny gold", 1));
+    unsigned long prevSize = 1;
     while (q.size() > 0) {
         int bagsCount = 0;
         auto curSet = rules.at(q.front().first);
@@ -58,7 +59,8 @@ int insideGoldCount(const std::unordered_map<std::string, std::set<std::pair<std
                 bagsCount += bags->second;
             }
         }
-        totCount += q.front().second * bagsCount;
+        totCount += q.front().second * prevSize * bagsCount;
+        prevSize *= q.front().second;
         q.pop();
     }
     return totCount;
