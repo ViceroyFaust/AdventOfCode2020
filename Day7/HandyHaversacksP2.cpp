@@ -45,24 +45,29 @@ std::string extractKey(const std::string& word) {
     return keyWordSplit[0] + " " + keyWordSplit[1];  // Key is always the first two words before "contain"
 }
 
-unsigned long insideGoldCount(const std::unordered_map<std::string, std::set<std::pair<std::string, int>>>& rules) {
-    unsigned long totCount = 0;
-    std::queue<std::pair<std::string, int>> q;
-    q.push(std::pair("shiny gold", 1));
-    unsigned long prevSize = 1;
+uint32_t insideGoldCount(const std::unordered_map<std::string, std::set<std::pair<std::string, int>>>& rules) {
+    uint32_t totCount = 0;
+    struct Bag {
+        Bag(const std::string& _type, int32_t _quantity) : type(_type), quantity(_quantity) {}
+        std::string type;
+        int32_t quantity;
+    };
+    std::queue<Bag> q;
+    q.push(Bag("shiny gold", 1));
     while (q.size() > 0) {
-        int bagsCount = 0;
-        auto curSet = rules.at(q.front().first);
-        for (auto bags = curSet.begin(); bags != curSet.end(); ++bags) {
-            if (bags->first != "") {
-                q.push(std::pair(bags->first, bags->second));
-                bagsCount += bags->second;
+        int count = 0;
+        auto& bag = q.front();
+        auto current_contents = rules.at(bag.type);
+        for (const auto& internal_bag : current_contents) {
+            if (internal_bag.first.size() > 0) {
+                auto this_bag = Bag(internal_bag.first, internal_bag.second * bag.quantity);
+                q.push(this_bag);
+                totCount += this_bag.quantity;
             }
         }
-        totCount += q.front().second * prevSize * bagsCount;
-        prevSize *= q.front().second;
         q.pop();
     }
+
     return totCount;
 }
 
