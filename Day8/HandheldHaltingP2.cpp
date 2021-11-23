@@ -61,9 +61,26 @@ RunStatus runInputCode(const std::vector<Command>& inputs) {
     return RunStatus(isLoop, accumulator);
 }
 
+int fixInputCode(const std::vector<Command>& inputs, const std::vector<size_t>& cmdIndexes) {
+    for (size_t i = 0; i < cmdIndexes.size(); ++i) {
+        std::vector<Command> modifiedInputs = inputs;
+        Command& changeCmd = modifiedInputs[cmdIndexes[i]];
+        if (changeCmd.oper == "jmp")
+            changeCmd.oper = "nop";
+        else
+            changeCmd.oper = "jmp";
+        RunStatus status = runInputCode(modifiedInputs);
+        if (!status.isInf) {
+            return status.acc;
+        }
+    }
+}
+
 int main() {
     std::vector<Command> inputList;
     std::vector<size_t> jmpAndNopIndexes;
     getInput(inputList, jmpAndNopIndexes);
+    
+    std::cout << fixInputCode(inputList, jmpAndNopIndexes) << std::endl;
     return 0;
 }
