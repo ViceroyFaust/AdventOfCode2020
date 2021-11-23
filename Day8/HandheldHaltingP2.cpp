@@ -29,13 +29,17 @@ std::vector<std::string> splitString(const std::string& str, std::string delim =
     return output;
 }
 
-void getInput(std::vector<Command>& vec) {
+void getInput(std::vector<Command>& inputs, std::vector<size_t> jmpAndNopI) {
     std::string strIn;
+    size_t i = 0;
     while (std::getline(std::cin, strIn)) {
         auto commandParts = splitString(strIn);
         std::string oper = commandParts[0];
         int arg = std::stoi(commandParts[1]);
-        vec.push_back(Command(oper, arg));
+        if (oper == "jmp" || oper == "nop")
+            jmpAndNopI.push_back(i);
+        inputs.push_back(Command(oper, arg));
+        ++i;
     }
 }
 
@@ -59,6 +63,7 @@ RunStatus runInputCode(const std::vector<Command>& inputs) {
 
 int main() {
     std::vector<Command> inputList;
-    getInput(inputList);
+    std::vector<size_t> jmpAndNopIndexes;
+    getInput(inputList, jmpAndNopIndexes);
     return 0;
 }
