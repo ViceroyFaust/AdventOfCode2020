@@ -74,6 +74,7 @@ int fixInputCode(const std::vector<Command>& inputs, const std::vector<size_t>& 
             return status.acc;
         }
     }
+    return 0;
 }
 
 int main() {
