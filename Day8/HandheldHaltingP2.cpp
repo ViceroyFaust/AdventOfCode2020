@@ -9,6 +9,12 @@ struct Command {
     Command(std::string str, int i) : oper(str), arg(i){};
 };
 
+struct RunStatus {
+    bool isInf;
+    int acc;
+    RunStatus(bool b, int i) : isInf(b), acc(i) {};
+};
+
 std::vector<std::string> splitString(const std::string& str, std::string delim = " ") {
     typedef std::string::size_type index;
     std::vector<std::string> output;
@@ -33,37 +39,26 @@ void getInput(std::vector<Command>& vec) {
     }
 }
 
-int main() {
-    std::vector<Command> inputList;
-    getInput(inputList);
-
+RunStatus runInputCode(const std::vector<Command>& inputs) {
     std::unordered_set<size_t> iHistory;
     bool isLoop = false;
     int accumulator = 0;
-    auto lastIndex = iHistory.begin(); // To detect the broken index
-    for (size_t i = 0; i < inputList.size(); ++i) {
-        auto status = iHistory.insert(i);
-        isLoop = !status.second;
-        if (isLoop) {
-            // if there is a loop, change the index causing the loop
-            // to jmp from nop OR nop from jmp
-            i = *lastIndex;
-            Command& cmd = inputList[i];
-            if (cmd.oper == "jmp")
-                cmd.oper = "nop";
-            else
-                cmd.oper = "jmp";
-            isLoop = false;
-        } else {
-            lastIndex = status.first;
-        }
-        Command cmd = inputList[i];
+    for (size_t i = 0; i < inputs.size(); ++i) {
+        isLoop = !iHistory.insert(i).second;
+        if (isLoop)
+            break;
+        Command cmd = inputs[i];
         if (cmd.oper == "acc") {
             accumulator += cmd.arg;
         } else if (cmd.oper == "jmp") {
             i += cmd.arg - 1;  // Because of ++i
         }
     }
-    std::cout << isLoop << ": " << accumulator << std::endl;
+    return RunStatus(isLoop, accumulator);
+}
+
+int main() {
+    std::vector<Command> inputList;
+    getInput(inputList);
     return 0;
 }
