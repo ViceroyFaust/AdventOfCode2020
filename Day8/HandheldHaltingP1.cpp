@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 struct Command {
@@ -34,6 +35,22 @@ void getInput(std::vector<Command>& vec) {
 
 int main() {
     std::vector<Command> inputList;
-    
+    getInput(inputList);
+
+    std::unordered_set<size_t> iHistory;
+    bool isLoop = false;
+    int accumulator = 0;
+    for (size_t i = 0; i < inputList.size(); ++i) {
+        isLoop = !iHistory.insert(i).second;
+        if (isLoop)
+            break;
+        Command cmd = inputList[i];
+        if (cmd.oper == "acc") {
+            accumulator += cmd.arg;
+        } else if (cmd.oper == "jmp") {
+            i += cmd.arg - 1;  // Because of ++i
+        }
+    }
+    std::cout << isLoop << ": " << accumulator << std::endl;
     return 0;
 }
