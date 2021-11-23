@@ -29,7 +29,7 @@ std::vector<std::string> splitString(const std::string& str, std::string delim =
     return output;
 }
 
-void getInput(std::vector<Command>& inputs, std::vector<size_t> jmpAndNopI) {
+void getInput(std::vector<Command>& inputs, std::vector<size_t>& jmpAndNopI) {
     std::string strIn;
     size_t i = 0;
     while (std::getline(std::cin, strIn)) {
