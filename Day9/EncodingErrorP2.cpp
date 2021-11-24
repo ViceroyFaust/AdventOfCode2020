@@ -43,10 +43,12 @@ unsigned long findError(const std::vector<unsigned long>& inputs, int preambleLe
 }
 
 unsigned long findWeakness(const std::vector<unsigned long>& inputs, unsigned long errorNum) {
-    while (true) {
+    unsigned int output = 0;
+    size_t startIndex = 0;
+    while (output == 0) {
         unsigned long int min = 0 - 1, max = 0;
         unsigned long sum = 0;
-        for (size_t i = 0; i < inputs.size(); ++i) {
+        for (size_t i = startIndex; i < inputs.size(); ++i) {
             unsigned long curNum = inputs[i];
             sum += curNum;
             if (curNum < min) {
@@ -54,13 +56,16 @@ unsigned long findWeakness(const std::vector<unsigned long>& inputs, unsigned lo
             } else if (curNum > max) {
                 max = curNum;
             }
-            if (sum == errorNum)
-                return min + max;
-            if (sum > errorNum)
-                return 0;
+            if (sum == errorNum) {
+                output = min + max;
+                break;
+            } else if (sum > errorNum) {
+                break;
+            }
         }
+        ++startIndex;
     }
-    return 0;
+    return output;
 }
 
 int main() {
@@ -68,5 +73,6 @@ int main() {
     getInput(inputList);
 
     unsigned long errorNum = findError(inputList, 25);
+    std::cout << findWeakness(inputList, errorNum) << std::endl;
     return 0;
 }
