@@ -30,7 +30,7 @@ bool isError(const std::deque<unsigned long>& preamble, unsigned long num) {
     return true;
 }
 
-int findError(const std::vector<unsigned long>& inputs, int preambleLen) {
+unsigned long findError(const std::vector<unsigned long>& inputs, int preambleLen) {
     std::deque<unsigned long> preamble = genPreamble(inputs, preambleLen);
     for (size_t i = preambleLen; i < inputs.size(); ++i) {
         unsigned long toCheck = inputs[i];
