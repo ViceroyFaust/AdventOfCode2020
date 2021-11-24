@@ -4,22 +4,22 @@
 #include <vector>
 
 // Populates a vector with the contents of the input
-void getInput(std::vector<int>& inputs) {
+void getInput(std::vector<unsigned long>& inputs) {
     std::string inputStr;
     while (std::getline(std::cin, inputStr))
-        inputs.push_back(std::stoi(inputStr));
+        inputs.push_back(std::stoul(inputStr));
 }
 
 // Generates a variable length preamble queue from the input
-std::deque<int> genPreamble(const std::vector<int>& inputs, int len) {
-    std::deque<int> preamble;
+std::deque<unsigned long> genPreamble(const std::vector<unsigned long>& inputs, int len) {
+    std::deque<unsigned long> preamble;
     for (int i = 0; i < len; ++i) {
         preamble.push_back(inputs[i]);
     }
     return preamble;
 }
 
-bool isError(const std::deque<int>& preamble, int num) {
+bool isError(const std::deque<unsigned long>& preamble, unsigned long num) {
     for (size_t i = 0; i < preamble.size(); ++i) {
         for (size_t j = i + 1; j < preamble.size(); ++j) {
             if (preamble[i] + preamble[j] == num) {
@@ -30,10 +30,10 @@ bool isError(const std::deque<int>& preamble, int num) {
     return true;
 }
 
-int findError(const std::vector<int>& inputs, int preambleLen) {
-    std::deque<int> preamble = genPreamble(inputs, preambleLen);
+int findError(const std::vector<unsigned long>& inputs, int preambleLen) {
+    std::deque<unsigned long> preamble = genPreamble(inputs, preambleLen);
     for (size_t i = preambleLen; i < inputs.size(); ++i) {
-        int toCheck = inputs[i];
+        unsigned long toCheck = inputs[i];
         if(isError(preamble, toCheck))
             return toCheck;
         preamble.pop_front();
@@ -43,9 +43,9 @@ int findError(const std::vector<int>& inputs, int preambleLen) {
 }
 
 int main() {
-    std::vector<int> inputList;
+    std::vector<unsigned long> inputList;
     getInput(inputList);
     
-    std::cout << findError(inputList, 5) << std::endl;
+    std::cout << findError(inputList, 25) << std::endl;
     return 0;
 }
